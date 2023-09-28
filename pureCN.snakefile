@@ -8,44 +8,46 @@ rule all:
 
 
 rule PreprocessIntervals:
-  input:
-    ""
 	output:
-		"results/MergeVcfs/subsetnormalpanel.vcf.gz"
+		interval_list = "results/PreprocessIntervals/{tumor}/{tumor}.preprocessed.interval_list"
 	params:
 		gatk = config["gatk_path"],
-    reference_genome = config["reference_genome"],
-    File ref_fasta_fai
-    File ref_fasta_dict
+    		reference_genome = config["reference_genome"],
+    		reference_dict = config["reference_dict"]
+    		reference_index = config["reference_index"]
 	log:
-		"logs/PreprocessIntervals/PreprocessIntervals.txt"
+		"logs/PreprocessIntervals/{tumor}/PreprocessIntervals.txt"
 	shell:
 		"""
 		{params.gatk} --java-options "-Xmx~{command_mem_mb}m" PreprocessIntervals \
-            --reference {params.reference_genome} \
-            --padding ~{default="250" padding} \
-            --bin-length ~{default="1000" bin_length} \
-            --interval-merging-rule OVERLAPPING_ONLY \
-            --output ~{base_filename}.preprocessed.interval_list"""
+            	--reference {params.reference_genome} \
+            	--padding 250 \
+            	--bin-length 1000 \
+            	--interval-merging-rule OVERLAPPING_ONLY \
+            	--output {output.interval_list}"""
 
 rule CollectCounts:
-  File intervals
-      File bam
-      File bam_idx
-      File ref_fasta
-      File ref_fasta_fai
-      File ref_fasta_dict
-
-      gatk --java-options "-Xmx~{command_mem_mb}m" CollectReadCounts \
-            -L ~{intervals} \
-            --input ~{bam} \
-            --read-index ~{bam_idx} \
-            --reference ~{ref_fasta} \
-            --format ~{default="HDF5" hdf5_or_tsv_or_null_format} \
-            --interval-merging-rule OVERLAPPING_ONLY \
-            --output ~{counts_filename_for_collect_read_counts} \
-            ~{"--gcs-project-for-requester-pays " + gcs_project_for_requester_pays} \
-            ~{sep=' ' disabled_read_filters_arr}
+	input:
+  		preprocessed_intervals = "results/PreprocessIntervals/{tumor}/{tumor}.preprocessed.interval_list",
+		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
+		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
+	output:
+		counts_filename_for_collect_read_counts = ""
+	params:
+		gatk = config["gatk_path"],
+    		reference_genome = config["reference_genome"],
+    		reference_dict = config["reference_dict"]
+    		reference_index = config["reference_index"]
+	shell:
+		"""
+		{params.gatk} --java-options "-Xmx~{command_mem_mb}m" CollectReadCounts \
+            	-L {input.preprocessed_intervals} \
+            	--input {input.bam} \
+            	--read-index {input.bam_idx} \
+            	--reference {params.reference_genome} \
+            	--interval-merging-rule OVERLAPPING_ONLY \
+            	--output {output.counts_filename_for_collect_read_counts}
+		"""
 
 
 rule CollectAllelicCounts:
@@ -57,7 +59,7 @@ rule CollectAllelicCounts:
       File ref_fasta_dict
 
 
-      gatk --java-options "-Xmx~{command_mem_mb}m" CollectAllelicCounts \
+      {params.gatk} --java-options "-Xmx~{command_mem_mb}m" CollectAllelicCounts \
             -L ~{common_sites} \
             --input ~{bam} \
             --read-index ~{bam_idx} \
@@ -72,7 +74,7 @@ rule DenoiseReadCounts:
       File read_counts
       File read_count_pon
 
-    gatk --java-options "-Xmx~{command_mem_mb}m" DenoiseReadCounts \
+    {params.gatk} --java-options "-Xmx~{command_mem_mb}m" DenoiseReadCounts \
             --input ~{read_counts} \
             --count-panel-of-normals ~{read_count_pon} \
             ~{"--number-of-eigensamples " + number_of_eigensamples} \
@@ -85,7 +87,7 @@ rule ModelSegments:
   String entity_id
       File denoised_copy_ratios
       File allelic_counts
-    gatk --java-options "-Xmx~{command_mem_mb}m" ModelSegments \
+    {params.gatk} --java-options "-Xmx~{command_mem_mb}m" ModelSegments \
             --denoised-copy-ratios ~{denoised_copy_ratios} \
             --allelic-counts ~{allelic_counts} \
             ~{"--normal-allelic-counts " + normal_allelic_counts} \
