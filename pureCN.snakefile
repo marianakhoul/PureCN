@@ -32,7 +32,7 @@ rule CollectCounts:
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
-		counts_filename_for_collect_read_counts = ""
+		collect_read_counts = ""
 	params:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
@@ -46,28 +46,34 @@ rule CollectCounts:
             	--read-index {input.bam_idx} \
             	--reference {params.reference_genome} \
             	--interval-merging-rule OVERLAPPING_ONLY \
-            	--output {output.counts_filename_for_collect_read_counts}
+            	--output {output.collect_read_counts}
 		"""
 
 
 rule CollectAllelicCounts:
   File common_sites
-      File bam
-      File bam_idx
-      File ref_fasta
-      File ref_fasta_fai
-      File ref_fasta_dict
-
-
-      {params.gatk} --java-options "-Xmx~{command_mem_mb}m" CollectAllelicCounts \
-            -L ~{common_sites} \
-            --input ~{bam} \
-            --read-index ~{bam_idx} \
-            --reference ~{ref_fasta} \
-            --minimum-base-quality ~{default="20" minimum_base_quality} \
-            --output ~{allelic_counts_filename} \
-            ~{"--gcs-project-for-requester-pays " + gcs_project_for_requester_pays}
-
+      	input:	
+		common_sites = "",
+		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
+		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
+	output:
+		allelic_counts = ""
+	params:
+		gatk = config["gatk_path"],
+    		reference_genome = config["reference_genome"],
+    		reference_dict = config["reference_dict"]
+    		reference_index = config["reference_index"]
+	shell:
+		"""
+	   	{params.gatk} --java-options "-Xmx~{command_mem_mb}m" CollectAllelicCounts \
+           	 -L {input.common_sites} \
+            	--input {input.bam} \
+            	--read-index {input.bam_idx} \
+            	--reference {params.reference_genome} \
+            	--minimum-base-quality 20 \
+            	--output {output.allelic_counts}
+		"""
+      	   
 
 rule DenoiseReadCounts:
   String entity_id
@@ -81,12 +87,12 @@ rule DenoiseReadCounts:
             --standardized-copy-ratios ~{entity_id}.standardizedCR.tsv \
             --denoised-copy-ratios ~{entity_id}.denoisedCR.tsv
   
-
     
 rule ModelSegments:
   String entity_id
       File denoised_copy_ratios
       File allelic_counts
+
     {params.gatk} --java-options "-Xmx~{command_mem_mb}m" ModelSegments \
             --denoised-copy-ratios ~{denoised_copy_ratios} \
             --allelic-counts ~{allelic_counts} \
