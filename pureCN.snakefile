@@ -46,7 +46,7 @@ rule CollectCounts:
             	--read-index {input.bam_idx} \
             	--reference {params.reference_genome} \
             	--interval-merging-rule OVERLAPPING_ONLY \
-            	--output {output.collect_read_counts}
+            	--output {output.collect_read_counts} #counts_filename_for_collect_read_counts = basename(counts_filename, ".gz")
 		"""
 
 
@@ -76,8 +76,9 @@ rule CollectAllelicCounts:
       	   
 
 rule DenoiseReadCounts:
-  String entity_id
-      File read_counts
+  entity_id = CollectCountsTumor.entity_id, # String base_filename = basename(bam, ".bam") entity_id = base_filename
+            read_counts = CollectCountsTumor.counts, #counts = counts_filename #String counts_filename = "~{base_filename}.~{counts_filename_extension}"
+#
       File read_count_pon
 
     {params.gatk} --java-options "-Xmx~{command_mem_mb}m" DenoiseReadCounts \
