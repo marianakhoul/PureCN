@@ -98,25 +98,24 @@ rule ModelSegments:
             --allelic-counts ~{allelic_counts} \
             ~{"--normal-allelic-counts " + normal_allelic_counts} \
             --minimum-total-allele-count-case ~{min_total_allele_count_} \
-            --minimum-total-allele-count-normal ~{default="30" min_total_allele_count_normal} \
-            --genotyping-homozygous-log-ratio-threshold ~{default="-10.0" genotyping_homozygous_log_ratio_threshold} \
-            --genotyping-base-error-rate ~{default="0.05" genotyping_base_error_rate} \
-            --maximum-number-of-segments-per-chromosome ~{default="1000" max_num_segments_per_chromosome} \
-            --kernel-variance-copy-ratio ~{default="0.0" kernel_variance_copy_ratio} \
-            --kernel-variance-allele-fraction ~{default="0.025" kernel_variance_allele_fraction} \
-            --kernel-scaling-allele-fraction ~{default="1.0" kernel_scaling_allele_fraction} \
-            --kernel-approximation-dimension ~{default="100" kernel_approximation_dimension} \
-            --window-size ~{sep=" --window-size " window_sizes} \
-            --number-of-changepoints-penalty-factor ~{default="1.0" num_changepoints_penalty_factor} \
-            --minor-allele-fraction-prior-alpha ~{default="25.0" minor_allele_fraction_prior_alpha} \
-            --number-of-samples-copy-ratio ~{default="100" num_samples_copy_ratio} \
-            --number-of-burn-in-samples-copy-ratio ~{default="50" num_burn_in_copy_ratio} \
-            --number-of-samples-allele-fraction ~{default="100" num_samples_allele_fraction} \
-            --number-of-burn-in-samples-allele-fraction ~{default="50" num_burn_in_allele_fraction} \
-            --smoothing-credible-interval-threshold-copy-ratio ~{default="2.0" smoothing_threshold_copy_ratio} \
-            --smoothing-credible-interval-threshold-allele-fraction ~{default="2.0" smoothing_threshold_allele_fraction} \
-            --maximum-number-of-smoothing-iterations ~{default="10" max_num_smoothing_iterations} \
-            --number-of-smoothing-iterations-per-fit ~{default="0" num_smoothing_iterations_per_fit} \
+            --minimum-total-allele-count-normal 30 \
+            --genotyping-homozygous-log-ratio-threshold -10.0 \
+            --genotyping-base-error-rate 0.05 \
+            --maximum-number-of-segments-per-chromosome 1000 \
+            --kernel-variance-copy-ratio 0.0 \
+            --kernel-variance-allele-fraction 0.025 \
+            --kernel-scaling-allele-fraction 1.0 \
+            --kernel-approximation-dimension 100 \
+            --number-of-changepoints-penalty-factor 1.0 \
+            --minor-allele-fraction-prior-alpha 25.0 \
+            --number-of-samples-copy-ratio 100 \
+            --number-of-burn-in-samples-copy-ratio 50 \
+            --number-of-samples-allele-fraction 100 \
+            --number-of-burn-in-samples-allele-fraction 50 \
+            --smoothing-credible-interval-threshold-copy-ratio 2.0 \
+            --smoothing-credible-interval-threshold-allele-fraction 2.0 \
+            --maximum-number-of-smoothing-iterations 10 \
+            --number-of-smoothing-iterations-per-fit 0 \
             --output ~{output_dir_} \
             --output-prefix ~{entity_id}
     
