@@ -1,24 +1,6 @@
 
 
-rule DenoiseReadCounts:
-        input:
-              read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5"
-        output:
-              standardizedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",
-              denoisedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv"
-        params:
-              gatk = config["gatk_path"],
-              read_count_pon = config["read_count_pon"]
-             
-        shell:
-            """
-            {params.gatk} DenoiseReadCounts \
-            --input {input.read_counts} \
-            --count-panel-of-normals {params.read_count_pon} \
-            ~{"--number-of-eigensamples " + number_of_eigensamples} \
-            --standardized-copy-ratios {output.standardizedCR} \
-            --denoised-copy-ratios {output.denoisedCR}
-            """
+
 
 rule ModelSegments:
   String entity_id
