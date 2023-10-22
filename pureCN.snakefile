@@ -4,7 +4,7 @@ configfile: "config/config.yaml"
 rule all:
 	input:
 		"results/PreprocessIntervals/preprocessed_intervals.interval_list",
-		expand("results/PreprocessIntervals/preprocessed_intervals.interval_list",tumor=config["normals"]),
+		expand("results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"]),
 		expand("results/CollectAllelicCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"])
 
 rule PreprocessIntervals:
@@ -33,7 +33,7 @@ rule CollectCounts:
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["normals"][wildcards.tumor]]
 	output:
-		collect_read_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.counts.hdf5"
+		collect_read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5"
 	params:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
