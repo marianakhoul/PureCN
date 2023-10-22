@@ -52,7 +52,7 @@ rule CollectCounts:
 
 
 rule CollectAllelicCounts:
-      	input:
+	input:
 		bam_file = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
