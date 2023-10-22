@@ -53,7 +53,7 @@ rule CollectCounts:
 
 rule CollectAllelicCounts:
       	input:
-		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
+		bam_file = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
 		allelic_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv"
@@ -67,7 +67,7 @@ rule CollectAllelicCounts:
 		"""
 	   	{params.gatk} CollectAllelicCounts \
            	 -L {params.common_sites} \
-            	--input {input.bam} \
+            	--input {input.bam_file} \
             	--read-index {input.bam_idx} \
             	--reference {params.reference_genome} \
             	--minimum-base-quality 20 \
