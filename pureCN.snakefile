@@ -5,7 +5,7 @@ rule all:
 	input:
 		"results/PreprocessIntervals/preprocessed_intervals.interval_list",
 		expand("results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"]),
-		expand("results/CollectAllelicCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"])
+		expand("results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv",tumor=config["normals"])
 
 rule PreprocessIntervals:
 	output:
