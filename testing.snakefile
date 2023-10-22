@@ -26,7 +26,6 @@ rule CollectCounts:
 rule CollectAllelicCounts:
   File common_sites
       	input:	
-		common_sites = "",
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
@@ -35,11 +34,12 @@ rule CollectAllelicCounts:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
     		reference_dict = config["reference_dict"],
-    		reference_index = config["reference_index"]
+    		reference_index = config["reference_index"],
+		common_sites = config["common_sites"]
 	shell:
 		"""
-	   	{params.gatk} --java-options "-Xmx~{command_mem_mb}m" CollectAllelicCounts \
-           	 -L {input.common_sites} \
+	   	{params.gatk} CollectAllelicCounts \
+           	 -L {params.common_sites} \
             	--input {input.bam} \
             	--read-index {input.bam_idx} \
             	--reference {params.reference_genome} \
