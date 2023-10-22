@@ -12,12 +12,14 @@ rule PreprocessIntervals:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
     		reference_dict = config["reference_dict"],
-    		reference_index = config["reference_index"]
+    		reference_index = config["reference_index"],
+		intervals = config["intervals"]
 	log:
 		"logs/PreprocessIntervals/PreprocessIntervals.txt"
 	shell:
 		"{params.gatk} PreprocessIntervals \
             	--reference {params.reference_genome} \
+		--intervals {params.intervals} \
             	--padding 250 \
             	--bin-length 1000 \
             	--interval-merging-rule OVERLAPPING_ONLY \
