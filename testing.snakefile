@@ -1,19 +1,25 @@
 
 
 rule DenoiseReadCounts:
-  entity_id = CollectCountsTumor.entity_id, # String base_filename = basename(bam, ".bam") entity_id = base_filename
-            read_counts = CollectCountsTumor.counts, #counts = counts_filename #String counts_filename = "~{base_filename}.~{counts_filename_extension}"
-#
-      File read_count_pon
-
-    {params.gatk} --java-options "-Xmx~{command_mem_mb}m" DenoiseReadCounts \
-            --input ~{read_counts} \
-            --count-panel-of-normals ~{read_count_pon} \
+        input:
+              read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5"
+        output:
+              standardizedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",
+              denoisedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv"
+        params:
+              gatk = config["gatk_path"],
+              read_count_pon = config["read_count_pon"]
+             
+        shell:
+            """
+            {params.gatk} DenoiseReadCounts \
+            --input {input.read_counts} \
+            --count-panel-of-normals {params.read_count_pon} \
             ~{"--number-of-eigensamples " + number_of_eigensamples} \
-            --standardized-copy-ratios ~{entity_id}.standardizedCR.tsv \
-            --denoised-copy-ratios ~{entity_id}.denoisedCR.tsv
-  
-    
+            --standardized-copy-ratios {output.standardizedCR} \
+            --denoised-copy-ratios {output.denoisedCR}
+            """
+
 rule ModelSegments:
   String entity_id
       File denoised_copy_ratios
