@@ -1,4 +1,4 @@
-configfile: "config/samples.yaml"
+#configfile: "config/samples.yaml"
 configfile: "config/config.yaml" 
 
 rule all:
