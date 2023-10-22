@@ -16,8 +16,7 @@ rule PreprocessIntervals:
 	log:
 		"logs/PreprocessIntervals/PreprocessIntervals.txt"
 	shell:
-		"
-		{params.gatk} PreprocessIntervals \
+		"{params.gatk} PreprocessIntervals \
             	--reference {params.reference_genome} \
             	--padding 250 \
             	--bin-length 1000 \
