@@ -5,7 +5,7 @@ rule CollectCounts:
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
-		collect_read_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv"
+		collect_read_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.counts.hdf5"
 	params:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
