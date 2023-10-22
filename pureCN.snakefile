@@ -11,7 +11,7 @@ rule PreprocessIntervals:
 	params:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
-    		reference_dict = config["reference_dict"]
+    		reference_dict = config["reference_dict"],
     		reference_index = config["reference_index"]
 	log:
 		"logs/PreprocessIntervals/PreprocessIntervals.txt"
