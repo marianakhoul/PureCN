@@ -51,7 +51,6 @@ rule CollectCounts:
 		"""
 
 rule CollectAllelicCounts:
-  File common_sites
       	input:	
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
