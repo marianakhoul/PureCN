@@ -50,6 +50,7 @@ rule CollectCounts:
             	--output {output.collect_read_counts} #counts_filename_for_collect_read_counts = basename(counts_filename, ".gz")
 		"""
 
+
 rule CollectAllelicCounts:
       	input:
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
