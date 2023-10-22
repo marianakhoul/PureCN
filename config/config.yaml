@@ -7,8 +7,8 @@ tabix: /usr/bin/tabix
 picard_jar: /home/ma1111/tools/picard.jar
 
 ## Path to reference files
-reference_genome: /mnt/storage/labs/sviswanathan/GATK_ref/Homo_sapiens_assembly38.fasta
-reference_dict: /mnt/storage/labs/sviswanathan/GATK_ref/Homo_sapiens_assembly38.dict
-reference_index: /mnt/storage/labs/sviswanathan/GATK_ref/Homo_sapiens_assembly38.fasta.fai
+reference_genome: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.fasta
+reference_dict: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.dict
+reference_index: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.fasta.fai
 germline_resource: /mnt/storage/labs/sviswanathan/GATK_ref/cz_ref/hg38_pon/af-only-gnomad.hg38.vcf.gz
 panel_of_normals: /mnt/storage/labs/sviswanathan/gdc_pons/gatk4_mutect2_4136_pon.vcf.gz
