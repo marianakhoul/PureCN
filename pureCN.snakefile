@@ -30,7 +30,7 @@ rule PreprocessIntervals:
 rule CollectCounts:
 	input:
   		preprocessed_intervals = "results/PreprocessIntervals/preprocessed_intervals.interval_list",
-		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
+		bam_file = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
 		collect_read_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.counts.hdf5"
@@ -52,7 +52,7 @@ rule CollectCounts:
 
 rule CollectAllelicCounts:
       	input:	
-		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
+		bam_file = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
 		allelic_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv"
