@@ -1,7 +1,7 @@
 
 rule CollectCounts:
 	input:
-  		preprocessed_intervals = "results/PreprocessIntervals/{tumor}/{tumor}.preprocessed.interval_list",
+  		preprocessed_intervals = "results/PreprocessIntervals/preprocessed_intervals.interval_list",
 		bam = lambda wildcards: config["base_file_name"][wildcards.tumor],
 		bam_idx = lambda wildcards: config["base_file_name"][config["index"][wildcards.tumor]]
 	output:
@@ -9,11 +9,11 @@ rule CollectCounts:
 	params:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
-    		reference_dict = config["reference_dict"]
+    		reference_dict = config["reference_dict"],
     		reference_index = config["reference_index"]
 	shell:
 		"""
-		{params.gatk} --java-options "-Xmx~{command_mem_mb}m" CollectReadCounts \
+		{params.gatk} CollectReadCounts \
             	-L {input.preprocessed_intervals} \
             	--input {input.bam} \
             	--read-index {input.bam_idx} \
@@ -34,7 +34,7 @@ rule CollectAllelicCounts:
 	params:
 		gatk = config["gatk_path"],
     		reference_genome = config["reference_genome"],
-    		reference_dict = config["reference_dict"]
+    		reference_dict = config["reference_dict"],
     		reference_index = config["reference_index"]
 	shell:
 		"""
