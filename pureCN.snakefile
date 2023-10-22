@@ -47,7 +47,7 @@ rule CollectCounts:
             	--read-index {input.bam_idx} \
             	--reference {params.reference_genome} \
             	--interval-merging-rule OVERLAPPING_ONLY \
-            	--output {output.collect_read_counts} #counts_filename_for_collect_read_counts = basename(counts_filename, ".gz")
+            	--output {output.collect_read_counts}
 		"""
 
 
