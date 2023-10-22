@@ -5,7 +5,9 @@ rule all:
 	input:
 		"results/PreprocessIntervals/preprocessed_intervals.interval_list",
 		expand("results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"]),
-		expand("results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv",tumor=config["normals"])
+		expand("results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv",tumor=config["normals"]),
+		expand("results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",tumor=config["normals"]),
+		expand("results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",tumor=config["normals"])
 
 rule PreprocessIntervals:
 	output:
@@ -73,4 +75,22 @@ rule CollectAllelicCounts:
             	--minimum-base-quality 20 \
             	--output {output.allelic_counts}
 		"""
-      	   
+
+rule DenoiseReadCounts:
+	input:
+		read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5"
+	output:
+		standardizedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",
+		denoisedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv"
+	params:
+		gatk = config["gatk_path"],
+		read_count_pon = config["read_count_pon"]
+	shell:
+		"""
+		{params.gatk} DenoiseReadCounts \
+		--input {input.read_counts} \
+		--count-panel-of-normals {params.read_count_pon} \
+		--standardized-copy-ratios {output.standardizedCR} \
+		--denoised-copy-ratios {output.denoisedCR}
+		"""
+
