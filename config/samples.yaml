@@ -1,0 +1,8 @@
+#samples.yaml for pureCN.snakefile
+
+base_file_name: 
+  ccle_786O: /home/ma1111/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam
+  ccle_786O_bai: /home/ma1111/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam.bai
+
+normals:
+  ccle_786O: ccle_786O_bai
