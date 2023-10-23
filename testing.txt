@@ -3,14 +3,16 @@ rule PureCN:
 	input:
 		segFile = "results/ModelSegments/{tumor}/{tumor}.modelFinal.seg"
 	output:
+		output_dir = directory("results/PureCN/{tumor}/")
 	log:
 		"logs/PureCN/{tumor}/PureCN.txt"
 	params:
-		purecn_intervals = config["purecn_intervals"]
+		purecn_intervals = config["purecn_intervals"],
+		purecn_script = config["purecn_script"]
 	shell:
 		"""
-			Rscript /opt/PureCN/PureCN.R \
-			--out /cromwell_root/"${sampleID}" \
+		Rscript {params.purecn_script} \
+			--out {output.output_dir} \
 			--sampleid {wildcards.tumor} \
 			--seg-file {input.segFile} \
 			--vcf "${vcf}" \
@@ -23,8 +25,8 @@ rule PureCN:
 			${"--max-segments " + maxSegments} \
 			${otherArguments}
 
-			Rscript -e "write.table(read.csv('${sampleID}.csv'),'table.txt',sep='\n',row.names=F,col.names=F,quote=F)"
-			Rscript depmap_omics/WGS_pipeline/PureCN_pipeline/call_wgd_and_cin.R "${sampleID}_loh.csv" "${sampleID}.csv"
+		Rscript -e "write.table(read.csv('{wildcards.tumor}.csv'),'table.txt',sep='\n',row.names=F,col.names=F,quote=F)"
+		Rscript depmap_omics/WGS_pipeline/PureCN_pipeline/call_wgd_and_cin.R "${sampleID}_loh.csv" "${sampleID}.csv"
 		"""
 
 
