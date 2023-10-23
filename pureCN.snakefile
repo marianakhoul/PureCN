@@ -7,7 +7,8 @@ rule all:
 		expand("results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"]),
 		expand("results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",tumor=config["normals"]),
-		expand("results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",tumor=config["normals"])
+		expand("results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",tumor=config["normals"]),
+		expand("results/ModelSegments/{tumor}/",tumor=config["normals"])
 
 rule PreprocessIntervals:
 	output:
@@ -41,6 +42,8 @@ rule CollectCounts:
     		reference_genome = config["reference_genome"],
     		reference_dict = config["reference_dict"],
     		reference_index = config["reference_index"]
+	log:
+		"logs/CollectReadCounts/{tumor}/CollectReadCounts.txt"
 	shell:
 		"""
 		{params.gatk} CollectReadCounts \
@@ -65,6 +68,8 @@ rule CollectAllelicCounts:
     		reference_dict = config["reference_dict"],
     		reference_index = config["reference_index"],
 		common_sites = config["common_sites"]
+	log:
+		"logs/CollectAllelicCounts/{tumor}/CollectAllelicCounts.txt"
 	shell:
 		"""
 	   	{params.gatk} CollectAllelicCounts \
@@ -85,6 +90,8 @@ rule DenoiseReadCounts:
 	params:
 		gatk = config["gatk_path"],
 		read_count_pon = config["read_count_pon"]
+	log:
+		"logs/DenoiseReadCounts/{tumor}/DenoiseReadCounts.txt"
 	shell:
 		"""
 		{params.gatk} DenoiseReadCounts \
@@ -93,4 +100,40 @@ rule DenoiseReadCounts:
 		--standardized-copy-ratios {output.standardizedCR} \
 		--denoised-copy-ratios {output.denoisedCR}
 		"""
+
+rule ModelSegments:
+	input:
+		denoised_copy_ratios = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",
+		allelic_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv"
+	output:
+		output_dir = "results/ModelSegments/{tumor}/"
+	params:
+		gatk = config["gatk_path"]
+	log:
+		"logs/ModelSegments/{tumor}/ModelSegments.txt"
+	shell:
+		"""{params.gatk} ModelSegments \
+		--denoised-copy-ratios {input.denoised_copy_ratios} \
+		--allelic-counts {input.allelic_counts} \
+		--minimum-total-allele-count-normal 30 \
+		--genotyping-homozygous-log-ratio-threshold -10.0 \
+		--genotyping-base-error-rate 0.05 \
+		--maximum-number-of-segments-per-chromosome 1000 \
+		--kernel-variance-copy-ratio 0.0 \
+		--kernel-variance-allele-fraction 0.025 \
+		--kernel-scaling-allele-fraction 1.0 \
+		--kernel-approximation-dimension 100 \
+		--number-of-changepoints-penalty-factor 1.0 \
+		--minor-allele-fraction-prior-alpha 25.0 \
+		--number-of-samples-copy-ratio 100 \
+		--number-of-burn-in-samples-copy-ratio 50 \
+		--number-of-samples-allele-fraction 100 \
+		--number-of-burn-in-samples-allele-fraction 50 \
+		--smoothing-credible-interval-threshold-copy-ratio 2.0 \
+		--smoothing-credible-interval-threshold-allele-fraction 2.0 \
+		--maximum-number-of-smoothing-iterations 10 \
+		--number-of-smoothing-iterations-per-fit 0 \
+		--output {output.output_dir} \
+		--output-prefix {tumor}"""
+    
 
