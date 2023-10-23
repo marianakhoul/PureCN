@@ -2,25 +2,29 @@
 rule PureCN:
 	input:
 		segFile = "results/ModelSegments/{tumor}/{tumor}.modelFinal.seg"
-		intervals = File purecn_intervals = "gs://ccleparams/references/PureCN_intervals/wgs_hg38_2_percent_intervals.txt"
-		also for the mutect2 run, these are the tasks:
+	output:
+	log:
+		"logs/PureCN/{tumor}/PureCN.txt"
+	params:
+		purecn_intervals = config["purecn_intervals"]
+	shell:
+		"""
+			Rscript /opt/PureCN/PureCN.R \
+			--out /cromwell_root/"${sampleID}" \
+			--sampleid "${sampleID}" \
+			--seg-file "${segFile}" \
+			--vcf "${vcf}" \
+			--intervals "${intervals}" \
+			--genome "${genome}" \
+			${"--max-purity " + maxPurity} \
+			${"--min-purity " + minPurity} \
+			${"--max-copy-number " + maxCopyNumber} \
+			${"--fun-segmentation " + funSegmentation} \
+			${"--max-segments " + maxSegments} \
+			${otherArguments}
 
-SplitIntervals
+			Rscript -e "write.table(read.csv('${sampleID}.csv'),'table.txt',sep='\n',row.names=F,col.names=F,quote=F)"
+			Rscript depmap_omics/WGS_pipeline/PureCN_pipeline/call_wgd_and_cin.R "${sampleID}_loh.csv" "${sampleID}.csv"
+		"""
 
-M2
 
-LearnReadOrientationModel
-
-MergeVCFs
-
-MergeBamOuts
-
-MergeStats
-
-MergePileupSummaries
-
-CalculateContamination
-
-Filter
-
-base_vcf we need: Filter.filtered_vcf
