@@ -81,22 +81,37 @@ rule CollectAllelicCounts:
             	--output {output.allelic_counts}
 		"""
 
-rule DenoiseReadCounts:
+rule CreateReadCountPanelOfNormals:
 	input:
 		read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5"
+	output:
+		read_counts_pon = "results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5"
+	params:
+		gatk = config["gatk_path"]
+	log:
+	shell:
+		"""
+		{params.gatk} CreateReadCountPanelOfNormals \
+		-I {input.read_counts}
+		-O {output.read_counts_pon}
+		"""
+
+rule DenoiseReadCounts:
+	input:
+		read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",
+		read_counts_pon = "results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5"
 	output:
 		standardizedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",
 		denoisedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv"
 	params:
-		gatk = config["gatk_path"],
-		read_count_pon = config["read_count_pon"]
+		gatk = config["gatk_path"]
 	log:
 		"logs/DenoiseReadCounts/{tumor}/DenoiseReadCounts.txt"
 	shell:
 		"""
 		{params.gatk} DenoiseReadCounts \
 		--input {input.read_counts} \
-		--count-panel-of-normals {params.read_count_pon} \
+		--count-panel-of-normals {input.read_count_pon} \
 		--standardized-copy-ratios {output.standardizedCR} \
 		--denoised-copy-ratios {output.denoisedCR}
 		"""
