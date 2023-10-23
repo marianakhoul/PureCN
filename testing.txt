@@ -9,6 +9,13 @@ rule PureCN:
 	params:
 		purecn_intervals = config["purecn_intervals"],
 		purecn_script = config["purecn_script"]
+		genome = config["genome"],
+		maxCopyNumber = config["maxCopyNumber"],
+		minPurity = config["minPurity"],
+		maxPurity = config["maxPurity"],
+		funSegmentation = config["funSegmentation"],
+		maxSegments = config["maxSegments"]
+
 	shell:
 		"""
 		Rscript {params.purecn_script} \
@@ -17,12 +24,12 @@ rule PureCN:
 			--seg-file {input.segFile} \
 			--vcf "${vcf}" \
 			--intervals {params.purecn_intervals} \
-			--genome "${genome}" \
-			${"--max-purity " + maxPurity} \
-			${"--min-purity " + minPurity} \
-			${"--max-copy-number " + maxCopyNumber} \
-			${"--fun-segmentation " + funSegmentation} \
-			${"--max-segments " + maxSegments} \
+			--genome {params.genome} \
+			--max-purity {params.maxPurity} \
+			--min-purity {params.minPurity} \
+			--max-copy-number {params.maxCopyNumber} \
+			--fun-segmentation {params.funSegmentation} \
+			--max-segments {params.maxSegments} \
 			--post-optimize --model-homozygous --min-total-counts 20
 
 		Rscript -e "write.table(read.csv('{wildcards.tumor}.csv'),'table.txt',sep='\n',row.names=F,col.names=F,quote=F)"
