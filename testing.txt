@@ -11,10 +11,10 @@ rule PureCN:
 		"""
 			Rscript /opt/PureCN/PureCN.R \
 			--out /cromwell_root/"${sampleID}" \
-			--sampleid "${sampleID}" \
-			--seg-file "${segFile}" \
+			--sampleid {wildcards.tumor} \
+			--seg-file {input.segFile} \
 			--vcf "${vcf}" \
-			--intervals "${intervals}" \
+			--intervals {params.purecn_intervals} \
 			--genome "${genome}" \
 			${"--max-purity " + maxPurity} \
 			${"--min-purity " + minPurity} \
