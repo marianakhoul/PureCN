@@ -6,6 +6,7 @@ rule all:
 		"results/PreprocessIntervals/preprocessed_intervals.interval_list",
 		expand("results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",tumor=config["normals"]),
 		expand("results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv",tumor=config["normals"]),
+		expand("results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",tumor=config["normals"]),
 		expand("results/ModelSegments/{tumor}/",tumor=config["normals"])
@@ -92,7 +93,7 @@ rule CreateReadCountPanelOfNormals:
 	shell:
 		"""
 		{params.gatk} CreateReadCountPanelOfNormals \
-		-I {input.read_counts}
+		-I {input.read_counts} \
 		-O {output.read_counts_pon}
 		"""
 
