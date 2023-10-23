@@ -152,4 +152,28 @@ rule ModelSegments:
 		--output {output.output_dir} \
 		--output-prefix {wildcards.tumor}"""
     
+rule PureCN:
+	input:
+		segFile = "results/ModelSegments/{tumor}/{tumor}.modelFinal.seg"
+		intervals = File purecn_intervals = "gs://ccleparams/references/PureCN_intervals/wgs_hg38_2_percent_intervals.txt"
+		also for the mutect2 run, these are the tasks:
 
+SplitIntervals
+
+M2
+
+LearnReadOrientationModel
+
+MergeVCFs
+
+MergeBamOuts
+
+MergeStats
+
+MergePileupSummaries
+
+CalculateContamination
+
+Filter
+
+base_vcf we need: Filter.filtered_vcf
