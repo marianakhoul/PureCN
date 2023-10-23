@@ -9,7 +9,7 @@ rule all:
 		expand("results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",tumor=config["normals"]),
-		expand("results/ModelSegments/{tumor}/",tumor=config["normals"])
+		directory(expand("results/ModelSegments/{tumor}/",tumor=config["normals"]))
 
 rule PreprocessIntervals:
 	output:
