@@ -6,9 +6,6 @@ java: /usr/bin/java
 tabix: /usr/bin/tabix
 picard_jar: /home/ma1111/tools/picard.jar
 
-## Script Path
-purecn_script: /home/ma1111/tools/PureCN/extdata/PureCN.R
-
 ## Path to reference files
 reference_genome: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.fasta
 reference_dict: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.dict
@@ -16,3 +13,14 @@ reference_index: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sap
 intervals: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/references_intervals_agilent_hg38_lifted_chrXY.no_header.list
 common_sites: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/common_sites_hg38_lifted.list
 purecn_intervals: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/references_PureCN_intervals_wgs_hg38_2_percent_intervals.txt
+
+## Script Path
+purecn_script: /home/ma1111/tools/PureCN/extdata/PureCN.R
+
+## PureCN Parameters
+genome: "hg38"
+maxCopyNumber: 8
+minPurity: 0.90
+maxPurity: 0.99
+funSegmentation: "Hclust"
+maxSegments: 1000
