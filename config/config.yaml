@@ -10,8 +10,5 @@ picard_jar: /home/ma1111/tools/picard.jar
 reference_genome: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.fasta
 reference_dict: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.dict
 reference_index: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/Homo_sapiens_assembly38.fasta.fai
-germline_resource: /mnt/storage/labs/sviswanathan/GATK_ref/cz_ref/hg38_pon/af-only-gnomad.hg38.vcf.gz
-panel_of_normals: /mnt/storage/labs/sviswanathan/gdc_pons/gatk4_mutect2_4136_pon.vcf.gz
 intervals: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/references_intervals_agilent_hg38_lifted_chrXY.no_header.list
 common_sites: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/common_sites_hg38_lifted.list
-read_count_pon: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/pons_WGS_PON_XY_v2.pon.hdf5
