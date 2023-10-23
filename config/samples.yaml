@@ -1,8 +1,17 @@
 #samples.yaml for pureCN.snakefile
 
 base_file_name: 
-  ccle_786O: /home/ma1111/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam
-  ccle_786O_bai: /home/ma1111/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam.bai
+  ccle_786O: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam
+  ccle_786O_bai: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam.bai
+  A1_CKDN230014512: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/cleaned_bams/A1_CKDN230014512_rg_sorted.bam
+  A1_CKDN230014512_bai: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/cleaned_bams/A1_CKDN230014512_rg_sorted.bam.bai
+  A3_CKDN230014514: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/cleaned_bams/A3_CKDN230014514_rg_sorted.bam
+  A3_CKDN230014514_bai: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/cleaned_bams/A3_CKDN230014514_rg_sorted.bam.bai
+  ccle_caki1: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/ccle_caki1_rg_sorted.bam
+  ccle_caki1_bai: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/ccle_caki1_rg_sorted.bam.bai
 
 normals:
   ccle_786O: ccle_786O_bai
+  A1_CKDN230014512: A1_CKDN230014512_bai
+  A3_CKDN230014514: A3_CKDN230014514_bai
+  ccle_caki1: ccle_caki1_bai
