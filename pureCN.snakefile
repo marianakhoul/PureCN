@@ -9,7 +9,7 @@ rule all:
 		expand("results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",tumor=config["normals"]),
 		expand("results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",tumor=config["normals"]),
-		directory(expand("results/ModelSegments/{tumor}/",tumor=config["normals"]))
+		expand("results/ModelSegments/{tumor}/",tumor=config["normals"])
 
 rule PreprocessIntervals:
 	output:
@@ -122,7 +122,7 @@ rule ModelSegments:
 		denoised_copy_ratios = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv",
 		allelic_counts = "results/CollectAllelicCounts/{tumor}/{tumor}.allelicCounts.tsv"
 	output:
-		output_dir = "results/ModelSegments/{tumor}/"
+		output_dir = directory("results/ModelSegments/{tumor}/")
 	params:
 		gatk = config["gatk_path"]
 	log:
