@@ -100,7 +100,7 @@ rule CreateReadCountPanelOfNormals:
 rule DenoiseReadCounts:
 	input:
 		read_counts = "results/CollectReadCounts/{tumor}/{tumor}.counts.hdf5",
-		read_counts_pon = "results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5"
+		read_count_pon = "results/CreateReadCountPanelOfNormals/{tumor}/{tumor}.pon.hdf5"
 	output:
 		standardizedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.standardizedCR.tsv",
 		denoisedCR = "results/DenoiseReadCounts/{tumor}/{tumor}.denoisedCR.tsv"
