@@ -150,6 +150,6 @@ rule ModelSegments:
 		--maximum-number-of-smoothing-iterations 10 \
 		--number-of-smoothing-iterations-per-fit 0 \
 		--output {output.output_dir} \
-		--output-prefix {tumor}"""
+		--output-prefix {wildcards.tumor}"""
     
 
