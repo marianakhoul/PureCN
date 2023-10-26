@@ -7,14 +7,16 @@ rule all:
 
 rule PureCN:
 	input:
-		segFile = "results/ModelSegments/{tumor}/{tumor}.modelFinal.seg"
+		segFile = "results/ModelSegments/{tumor}/{tumor}.modelFinal.seg",
+		vcf = lambda wildcards: config["base_file_name"][wildcards.tumor]
 	output:
 		output_dir = directory("results/PureCN/{tumor}/")
 	log:
 		"logs/PureCN/{tumor}/PureCN.txt"
 	params:
 		purecn_intervals = config["purecn_intervals"],
-		purecn_script = config["purecn_script"]
+		purecn_script = config["purecn_script"],
+		call_wgd_and_cin_script = config["call_wgd_and_cin_script"],
 		genome = config["genome"],
 		maxCopyNumber = config["maxCopyNumber"],
 		minPurity = config["minPurity"],
@@ -28,7 +30,7 @@ rule PureCN:
 			--out {output.output_dir} \
 			--sampleid {wildcards.tumor} \
 			--seg-file {input.segFile} \
-			--vcf "${vcf}" \
+			--vcf {input.vcf} \
 			--intervals {params.purecn_intervals} \
 			--genome {params.genome} \
 			--max-purity {params.maxPurity} \
@@ -39,7 +41,7 @@ rule PureCN:
 			--post-optimize --model-homozygous --min-total-counts 20
 
 		Rscript -e "write.table(read.csv('{wildcards.tumor}.csv'),'table.txt',sep='\n',row.names=F,col.names=F,quote=F)"
-		Rscript depmap_omics/WGS_pipeline/PureCN_pipeline/call_wgd_and_cin.R "${sampleID}_loh.csv" "${sampleID}.csv"
+		Rscript {params.call_wgd_and_cin_script} "{wildcards.tumor}_loh.csv" "{wildcards.tumor}.csv"
 		"""
 
 
