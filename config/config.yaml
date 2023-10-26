@@ -16,6 +16,7 @@ purecn_intervals: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/ccle/referen
 
 ## Script Path
 purecn_script: /home/ma1111/tools/PureCN/extdata/PureCN.R
+call_wgd_and_cin_script: /home/mi724/Tools/PureCN/depmap_omics/WGS_pipeline/PureCN_pipeline/call_wgd_and_cin.R
 
 ## PureCN Parameters
 genome: "hg38"
