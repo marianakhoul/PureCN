@@ -1,4 +1,4 @@
-#samples.yaml for pureCN.snakefile
+#samples.yaml for segFile.snakefile
 
 base_file_name: 
   ccle_786O: /mnt/storage/labs/sviswanathan/tRCC_data/trcc_wes/bam_run/ccle_786O_rg_sorted.bam
