@@ -1,7 +1,12 @@
-    
+configfile: "config/samples_purecn.yaml"
+configfile: "config/config.yaml" 
+
+rule all:
+	input:
+		expand("results/PureCN/{tumor}/",tumor=config["normals"])
 
 rule PureCN:
-input:
+	input:
 		segFile = "results/ModelSegments/{tumor}/{tumor}.modelFinal.seg"
 	output:
 		output_dir = directory("results/PureCN/{tumor}/")
