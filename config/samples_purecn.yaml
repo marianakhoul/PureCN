@@ -1,0 +1,9 @@
+#samples.yaml for pureCN.snakefile
+
+base_file_name:
+  A1_CKDN230014512: /home/ma1111/tRCC_data/trcc_wes/M2/new/A1/A1_CKDN230014512_final_filtered.vcf.gz
+  A3_CKDN230014514: /home/ma1111/tRCC_data/trcc_wes/M2/new/A3/A3_CKDN230014514_final_filtered.vcf.gz
+
+normals:
+  A1_CKDN230014512: A1_CKDN230014512
+  A3_CKDN230014514: A3_CKDN230014514
